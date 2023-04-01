@@ -74,7 +74,8 @@ const shapes = [
   },
 ];
 
-function CamSection() {
+function CamSection({ setAction }) {
+
   const [resolutionOptions, setResolutionOptions] = useState(
     defaultResolutionOptions
   );
@@ -91,6 +92,7 @@ function CamSection() {
       type: "set-camera-resolution",
       payload: { width, height },
     });
+    setAction({ type: "set-camera-resolution", payload: { width, height } })
   };
 
   const handleShapeChange = (e) => {
@@ -123,6 +125,7 @@ function CamSection() {
       type: "set-camera-shape",
       payload: style,
     });
+    setAction({ type: "set-camera-shape", payload: style })
   };
 
   const handleMirrorChange = (e) => {
@@ -139,6 +142,7 @@ function CamSection() {
       type: "set-camera-mirror",
       payload: style,
     });
+    setAction({ type: "set-camera-mirror", payload: style })
   };
 
   return (
@@ -147,7 +151,7 @@ function CamSection() {
         <Card.Body>
           <Card.Title>Cam</Card.Title>
 
-          <SelectCamera />
+          <SelectCamera setAction={setAction}/>
           <SelectResolution
             resolutions={resolutionOptions}
             onChange={handleResolutionChange}

@@ -1,22 +1,28 @@
 import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
+import { useState, useEffect } from "react";
+
+const { electronAPI } = window;
 
 function ThemeSection() {
+  const [settings, setSettings] = useState([]);
+
+  useEffect(() => {
+    const data = localStorage.getItem("settings");
+    if (!data) return;
+    setSettings(JSON.parse(data) ?? []);
+  }, []);
+
+  const handleChangeEffect = () => {
+    const data = settings[0];
+    electronAPI.sendSync("shared-window-channel", {
+      type: data.type,
+      payload: data.payload,
+    });
+  };
+
   return (
     <Container className="p-3">
-      <Card>
-          <ListGroup as="ul">
-            <ListGroup.Item as="li" active>
-              Cras justo odio
-            </ListGroup.Item>
-            <ListGroup.Item as="li">Dapibus ac facilisis in</ListGroup.Item>
-            <ListGroup.Item as="li" disabled>
-              Morbi leo risus
-            </ListGroup.Item>
-            <ListGroup.Item as="li">Porta ac consectetur ac</ListGroup.Item>
-          </ListGroup>
-      </Card>
+      <div onClick={handleChangeEffect}>Settings</div>
     </Container>
   );
 }

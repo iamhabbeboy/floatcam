@@ -5,7 +5,7 @@ import Alert from "react-bootstrap/Alert";
 
 const { electronAPI } = window;
 
-const Camera = () => {
+const Camera = ({ setAction }) => {
   const [errorOccurred, setErrorOccurred] = useState(false);
 
   const [webcams, setWebcams] = React.useState([
@@ -33,6 +33,7 @@ const Camera = () => {
       type: "set-video-stream",
       payload: constraints,
     });
+    setAction({ type: "set-video-stream", payload: constraints });
   };
 
   return (
