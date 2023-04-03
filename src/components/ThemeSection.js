@@ -1,28 +1,68 @@
 import Container from "react-bootstrap/Container";
-import { useState, useEffect } from "react";
+import ListGroup from "react-bootstrap/ListGroup";
+import Button from 'react-bootstrap/Button';
 
 const { electronAPI } = window;
 
 function ThemeSection() {
-  const [settings, setSettings] = useState([]);
+  let settings = [];
+  for (var i = 0, len = localStorage.length; i < len; ++i) {
+    let key = localStorage.key(i);
+    let obj = localStorage.getItem(key);
+    settings.push({ name: key, data: JSON.parse(obj) ?? [] });
+  }
 
-  useEffect(() => {
-    const data = localStorage.getItem("settings");
-    if (!data) return;
-    setSettings(JSON.parse(data) ?? []);
-  }, []);
+  const handleChangeEffect = (payload) => {
+    const cameraConfig = [
+      "set-camera-resolution",
+      "set-camera-shape",
+      "set-camera-mirror",
+      "set-border-width",
+      "set-border-style",
+      "set-border-color",
+      "set-video-stream",
+      "set-video-filter",
+    ];
+    // cameraConfig.forEach((data) => {
+    //   electronAPI.sendSync("shared-window-channel", {
+    //     type: data,
+    //     payload: {},
+    //   });
+    // })
 
-  const handleChangeEffect = () => {
-    const data = settings[0];
-    electronAPI.sendSync("shared-window-channel", {
-      type: data.type,
-      payload: data.payload,
+    payload.forEach((data) => {
+      if (cameraConfig.includes(data.type)) {
+        electronAPI.sendSync("shared-window-channel", {
+          type: data.type,
+          payload: data.payload,
+        });
+      }
     });
+    // if(cameraConfig.includes(payload.type)) {
+    // const data = settings[0];
+    // electronAPI.sendSync("shared-window-channel", {
+    //   type: data.type,
+    //   payload: data.payload,
+    // });
   };
 
   return (
     <Container className="p-3">
-      <div onClick={handleChangeEffect}>Settings</div>
+      <ListGroup as="ol" numbered>
+        {settings.map((setting) => {
+          return (
+            <ListGroup.Item
+              className="d-flex justify-content-between align-items-start"
+              onClick={(e) => handleChangeEffect(setting.data)}
+            >
+              <div className="ms-2 me-auto" style={{cursor: "pointer"}}>
+                <div className="fw-bold">{setting.name}</div>
+              </div>
+              <Button variant="light" size="sm">delete</Button>
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
     </Container>
   );
 }

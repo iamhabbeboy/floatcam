@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 
 const { electronAPI } = window;
 
-function BorderWidth() {
+function BorderWidth({setAction}) {
   const borderWidths = [
     {
       value: "0",
@@ -29,6 +29,7 @@ function BorderWidth() {
       type: "set-border-width",
       payload: event.target.value,
     });
+    setAction({ type: "set-border-width", payload: event.target.value })
   };
 
   return (

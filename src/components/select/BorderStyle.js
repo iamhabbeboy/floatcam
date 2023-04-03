@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 
 const { electronAPI } = window;
 
-function BorderStyle() {
+function BorderStyle({setAction}) {
   const borderStyles = [
     {
       value: "solid",
@@ -45,6 +45,7 @@ function BorderStyle() {
       type: "set-border-style",
       payload: event.target.value,
     });
+    setAction({ type: "set-camera-shape", payload: event.target.value })
   };
 
   return (

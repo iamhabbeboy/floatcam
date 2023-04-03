@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 
 const { electronAPI } = window;
 
-function Filter() {
+function Filter({setAction}) {
   const filters = [
     {
       value: "none",
@@ -70,6 +70,8 @@ function Filter() {
       type: "set-video-filter",
       payload: style,
     });
+    setAction({ type: "set-border-color", payload: style })
+
   };
 
   return (

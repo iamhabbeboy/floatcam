@@ -7,12 +7,13 @@ import SelectBorderStyle from "./select/BorderStyle";
 
 const { electronAPI } = window;
 
-function BorderSection() {
+function BorderSection({setAction}) {
   const handleColorChange = (event) => {
     electronAPI.sendSync("shared-window-channel", {
       type: "set-border-color",
       payload: event.target.value,
     });
+    setAction({ type: "set-border-color", payload: event.target.value })
   };
 
   return (
